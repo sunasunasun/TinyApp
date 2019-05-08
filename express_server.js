@@ -21,21 +21,18 @@ app.post("/urls", (req, res) => {
   console.log(req.body);
   var key = generateRandomString(6)
   urlDatabase[key] = req.body.longURL
-  // Log the POST request body to the console
-  res.redirect("/urls/" + key);         // Respond with 'Ok' (we will replace this)
+  res.redirect("/urls/" + key);
 });
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
   res.render("urls_show", templateVars);
 });
-app.get("/", (req, res) => {
-  res.send("Hello!");
+app.get("/u/:shortURL", (req, res) => {
+    const longURL = urlDatabase[req.params.shortURL]
+  res.redirect(longURL);
 });
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
-});
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
 function generateRandomString(length) {
