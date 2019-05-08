@@ -8,16 +8,17 @@
   <title>TinyApp</title>
 </head>
 <body style="font-size:20px; padding:50px;">
-    <!-- Add EJS code here -->
-    <% include ./partials/_header %>
-    <a href='#'>Create New TinyURL</a>
-    <form method="POST" action="/urls/9sm5xK/delete">...</form>
-   <ul>
-    <% for(var key in urls) { %>
-    <li><%= key %> - <%= urls[key] %>
-      <button type="submit" class="btn btn-primary">Delete</button>
-    </li>
-    <% } %>
-</ul>
+  <!-- Add EJS code here -->
+  <% include ./partials/_header %>
+  <a href='#'>Create New TinyURL</a>
+  <% for(var shortURL in urls) { %>
+    <form method="POST" action="/urls/<%= shortURL %>/delete">
+      <ul>
+        <li><%= shortURL %> - <%= urls[shortURL] %>
+          <button type="submit" class="btn btn-primary">Delete</button>
+        </li>
+      </ul>
+    </form>
+  <% } %>
 </body>
 </html>
