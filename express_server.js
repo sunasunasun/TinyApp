@@ -50,24 +50,39 @@ app.post("/register", (req, res) => {
   var userID = generateRandomString(6)
   const email = req.body.email
   const password = req.body.password
+  if(email === "" || password === ""){
+    res.status(400);
+    res.send('fields not there');
+    return
+  }
+
+  if(emailExisted(email)){
+    res.status(400);
+    res.send('email already used')
+    return
+  }
+
+  addUser(userID, email, password)
+
+  res.cookie('user_id', userID);
+  res.redirect('/urls')
+})
+
+function emailExisted(email){
   for(var key in users){
     if(users[key].email === email){
-    res.status(400);
-    res.send('None shall pass');
+    return true;
     }
   }
-    if(email === "" || password === ""){
-    rres.status(400);
-    res.send('None shall pass');
-  }
-  users[userID] = {
+}
+
+function addUser(userID, email, password) {
+users[userID] = {
     id: userID,
     email: email,
     password: password
   }
-    res.cookie('user_id', userID);
-    res.redirect('/urls')
-})
+}
 
 app.post("/urls", (req, res) => {
   console.log("test", req.body);
