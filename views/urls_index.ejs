@@ -10,12 +10,18 @@
 <body style="font-size:20px; padding:50px;">
   <!-- Add EJS code here -->
   <% include ./partials/_header %>
-  <a href='#'>Create New TinyURL</a>
+  <a href='/urls/new'>Create New TinyURL</a>
   <% for(var shortURL in urls) { %>
     <form method="POST" action="/urls/<%= shortURL %>/delete">
       <ul>
         <li><%= shortURL %> - <%= urls[shortURL] %>
           <button type="submit" class="btn btn-primary">Delete</button>
+        </li>
+      </ul>
+    </form>
+    <form method="GET" action="/urls/<%= shortURL %>">
+      <ul>
+          <button type="submit" class="btn btn-primary">Edit</button>
         </li>
       </ul>
     </form>
