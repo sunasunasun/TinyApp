@@ -31,7 +31,6 @@ app.get("/urls", (req, res) => {
    urls: urlDatabase,
    username: req.cookies["user_id"]
  };
- console.log(templateVars)
   res.render("urls_index", templateVars);
 });
 
@@ -51,12 +50,21 @@ app.post("/register", (req, res) => {
   var userID = generateRandomString(6)
   const email = req.body.email
   const password = req.body.password
+  for(var key in users){
+    if(users[key].email === email){
+    res.status(400);
+    res.send('None shall pass');
+    }
+  }
+    if(email === "" || password === ""){
+    rres.status(400);
+    res.send('None shall pass');
+  }
   users[userID] = {
     id: userID,
     email: email,
     password: password
   }
-  // console.log(users)
     res.cookie('user_id', userID);
     res.redirect('/urls')
 })
