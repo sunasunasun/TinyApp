@@ -2,13 +2,14 @@
 <%console.log(username)%>
   <%if(!username){%>
   <form method="POST" action="/login">
+    <p>Username: </p>
     <p>
       <input type="text" name="username"></input>
     </p>
     <button type="submit" class="btn btn-primary">Login</button>
     </form>
   <% } else{ %>
-    <p><%= username %></p>
+    <p>Logged In As: <%= username %></p>
     <form method="POST" action="/logout">
           <button type="submit" class="btn btn-primary">Logout</button>
     </form>
