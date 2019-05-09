@@ -46,7 +46,7 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  // console.log(req.body.email)
+  //console.log(req.body.email)
   var userID = generateRandomString(6)
   const email = req.body.email
   const password = req.body.password
@@ -98,7 +98,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   res.redirect("/urls");
 });
 
@@ -112,7 +112,7 @@ app.post('/urls/:shortURL', (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = {
     shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL],
-    username: req.cookies["username"]
+    username: req.cookies["user_id"]
   };
   res.render("urls_show", templateVars);
 });
