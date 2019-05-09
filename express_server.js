@@ -12,13 +12,22 @@ var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
+  let templateVars = {
+   urls: urlDatabase,
+   username: req.cookies["username"]
+ };
   res.render("urls_index", templateVars);
 });
+
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  let templateVars = {
+   username: req.cookies["username"]
+ };
+  res.render("urls_new", templateVars);
 });
+
 app.post("/urls", (req, res) => {
   console.log(req.body);
   var shortURL = generateRandomString(6)
@@ -39,18 +48,24 @@ app.post('/urls/:shortURL', (req, res) => {
 })
 
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
+  let templateVars = {
+    shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL],
+    username: req.cookies["username"]
+  };
   res.render("urls_show", templateVars);
 });
+
 app.get("/u/:shortURL", (req, res) => {
     const longURL = urlDatabase[req.params.shortURL]
   res.redirect(longURL);
 });
+
 app.post('/urls/:shortURL/delete', (req, res) => {
   const shortURL = req.params.shortURL
   delete urlDatabase[shortURL]
   res.redirect('/urls')
 })
+
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
