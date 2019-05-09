@@ -23,7 +23,12 @@ app.post("/urls", (req, res) => {
   console.log(req.body);
   var shortURL = generateRandomString(6)
   urlDatabase[shortURL] = req.body.longURL
-  res.redirect("/urls/" + shortURL);
+  res.redirect("/urls" + shortURL);
+});
+
+app.post("/login", (req, res) => {
+  res.cookie('username', req.body.username);
+  res.redirect("/urls");
 });
 
 app.post('/urls/:shortURL', (req, res) => {
