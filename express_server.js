@@ -8,9 +8,9 @@ app.set("view engine", "ejs")
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
-var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+const urlDatabase = {
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "userRandomID" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 
 const users = {
@@ -30,8 +30,14 @@ app.get("/urls", (req, res) => {
   if(req.cookies.user_id === undefined){
     return res.redirect("/login")
   }
+  let ownUrls = {}
+  for(var key in urlDatabase){
+    if(urlDatabase[key].userID === req.cookies.user_id){
+       ownUrls[key] = urlDatabase[key]
+    }
+  }
   let templateVars = {
-   urls: urlDatabase,
+   urls: ownUrls,
    email: users[req.cookies.user_id].email,
  };
   res.render("urls_index", templateVars);
@@ -112,14 +118,14 @@ users[userID] = {
 }
 
 app.post("/urls", (req, res) => {
-  console.log("test", req.body);
   var shortURL = generateRandomString(6)
-  urlDatabase[shortURL] = req.body.longURL
+  urlDatabase[shortURL] = {
+    longURL: req.body.longURL,
+    userID: req.cookies.user_id}
   res.redirect("/urls");
 });
 
 app.post("/login", (req, res) => {
-  //loop the users to find
   var userID = generateRandomString(6)
   const email = req.body.email
   const password = req.body.password
@@ -155,18 +161,27 @@ app.post("/logout", (req, res) => {
 
 app.post('/urls/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL
-  // console.log(shortURL, req.body.longURL)
-  urlDatabase[shortURL] = req.body.longURL
+  urlDatabase[shortURL] = {
+    longURL: req.body.longURL,
+    userID: req.cookies.user_id}
   res.redirect('/urls')
 })
 
 app.get("/urls/:shortURL", (req, res) => {
+  let ownUrls = {}
+  for(var key in urlDatabase){
+    if(urlDatabase[key].userID === req.cookies.user_id){
+       ownUrls[key] = urlDatabase[key]
+    }
+  }
   let templateVars = {
+    urls: ownUrls,
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL],
     user_id: req.cookies["user_id"],
     email: req.cookies.user_email
   };
+  console.log(urlDatabase[req.params.shortURL])
   res.render("urls_show", templateVars);
 });
 
