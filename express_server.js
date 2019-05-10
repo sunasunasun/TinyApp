@@ -27,9 +27,10 @@ const users = {
 }
 
 app.get("/urls", (req, res) => {
+  console.log('req.cookies.user_id', req.cookies.user_id)
   let templateVars = {
    urls: urlDatabase,
-   email: req.cookies.user_email,
+   email: users[req.cookies.user_id].email,
  };
   res.render("urls_index", templateVars);
 });
@@ -109,26 +110,23 @@ app.post("/login", (req, res) => {
     res.send('fields not there');
     return
   }
-  for(var key in users){
-    if(users[key].email === email && users[key].password != password){
-    res.status(403);
-    res.send('password is wrong')
-    return
-    }
-  }
-  if(!emailExisted(email)){
+    if(!emailExisted(email)){
     res.status(403);
     res.send('email is not existed')
     return
   }
-
-  res.cookie('user_id', userID);
-  res.redirect('/urls')
-
-  // res.cookie('user_id', userID);
-  // res.cookie('user_email', req.body.email);
-  // res.cookie('user_password', req.body.password);
-  // res.redirect("/urls");
+  for(var key in users){
+    if(users[key].email === email && users[key].password != password){
+      res.status(403);
+      res.send('password is wrong')
+      return
+    }
+    else if (users[key].email === email && users[key].password === password){
+      res.cookie('user_id', key);
+      res.redirect('/urls')
+      return
+    }
+  }
 });
 
 
