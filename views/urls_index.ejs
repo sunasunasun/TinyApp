@@ -14,7 +14,7 @@
   <% for(var shortURL in urls) { %>
     <form method="POST" action="/urls/<%= shortURL %>/delete">
       <ul>
-        <li><%= shortURL %> - <%= urls[shortURL] %>
+        <li><%= shortURL %> - <%= urls[shortURL].longURL %>
           <button type="submit" class="btn btn-primary">Delete</button>
         </li>
       </ul>
