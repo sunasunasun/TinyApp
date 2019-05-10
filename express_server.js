@@ -41,17 +41,19 @@ app.get("/urls/new", (req, res) => {
 
  // A way to work around email not being defined if user not found
 
-  let user = users[req.cookies.user_id]
-  if (!user) {
-    user = {}
+ //  let user = users[req.cookies.user_id]
+ //  if (!user) {
+ //    user = {}
+ //  }
+ //  let templateVars = {
+ //   email: user.email
+ // };
+  if(req.cookies.user_id === undefined){
+    return res.redirect("/login")
   }
   let templateVars = {
-   email: user.email
+   email: users[req.cookies.user_id].email
  };
-
- //  let templateVars = {
- //   email: users[req.cookies.user_id].email
- // };
   res.render("urls_new", templateVars);
 });
 
