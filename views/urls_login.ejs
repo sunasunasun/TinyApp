@@ -9,14 +9,13 @@
 </head>
 <body style="font-size:20px; padding:50px;">
        <% include ./partials/_header %>
-       <h4>Register</h4>
-    <form action="/register" method="POST">
-        <p>Email:</p>
-        <input type='email' name="email">
-        <p>Password</p>
+  <h4>Login</h4>
+  <form method="POST" action="/login">
+    <p>Email: </p>
+      <input type='email' name="email">
+      <p>Password: </p>
         <input type='password' name='password'>
-        <br>
-        <br><button type="submit" class="btn btn-primary">Register</button>
+    <br>
+    <br><button type="submit" class="btn btn-primary">Login</button>
     </form>
 </body>
-</html>
