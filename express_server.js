@@ -115,7 +115,7 @@ app.post("/urls", (req, res) => {
   console.log("test", req.body);
   var shortURL = generateRandomString(6)
   urlDatabase[shortURL] = req.body.longURL
-  res.redirect("/urls" + shortURL);
+  res.redirect("/urls");
 });
 
 app.post("/login", (req, res) => {
@@ -162,14 +162,16 @@ app.post('/urls/:shortURL', (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = {
-    shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL],
-    username: req.cookies["user_id"]
+    shortURL: req.params.shortURL,
+    longURL: urlDatabase[req.params.shortURL],
+    user_id: req.cookies["user_id"],
+    email: req.cookies.user_email
   };
   res.render("urls_show", templateVars);
 });
 
 app.get("/u/:shortURL", (req, res) => {
-    const longURL = urlDatabase[req.params.shortURL]
+  const longURL = urlDatabase[req.params.shortURL]
   res.redirect(longURL);
 });
 
