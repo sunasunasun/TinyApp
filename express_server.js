@@ -27,7 +27,9 @@ const users = {
 }
 
 app.get("/urls", (req, res) => {
-  console.log('req.cookies.user_id', req.cookies.user_id)
+  if(req.cookies.user_id === undefined){
+    return res.redirect("/login")
+  }
   let templateVars = {
    urls: urlDatabase,
    email: users[req.cookies.user_id].email,
@@ -36,14 +38,28 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
+
+ // A way to work around email not being defined if user not found
+
+  let user = users[req.cookies.user_id]
+  if (!user) {
+    user = {}
+  }
   let templateVars = {
-   username: req.cookies["user_id"]
+   email: user.email
  };
+
+ //  let templateVars = {
+ //   email: users[req.cookies.user_id].email
+ // };
   res.render("urls_new", templateVars);
 });
 
 app.get("/register", (req, res) => {
-  res.render("urls_register")
+  let templateVars = {
+   email: ''
+ };
+  res.render("urls_register", templateVars)
 });
 
 app.get("/login", (req, res) => {
