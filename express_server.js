@@ -29,7 +29,7 @@ const users = {
 app.get("/urls", (req, res) => {
   let templateVars = {
    urls: urlDatabase,
-   username: req.cookies["user_id"]
+   email: req.cookies.user_email,
  };
   res.render("urls_index", templateVars);
 });
@@ -43,6 +43,14 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/register", (req, res) => {
   res.render("urls_register")
+});
+
+app.get("/login", (req, res) => {
+  let templateVars = {
+   urls: urlDatabase,
+   email: req.cookies.user_email,
+ };
+  res.render("urls_login", templateVars)
 });
 
 app.post("/register", (req, res) => {
@@ -93,9 +101,36 @@ app.post("/urls", (req, res) => {
 
 app.post("/login", (req, res) => {
   //loop the users to find
-  res.cookie('user_id', req.body.username);
-  res.redirect("/urls");
+  var userID = generateRandomString(6)
+  const email = req.body.email
+  const password = req.body.password
+  if(email === "" || password === ""){
+    res.status(400);
+    res.send('fields not there');
+    return
+  }
+  for(var key in users){
+    if(users[key].email === email && users[key].password != password){
+    res.status(403);
+    res.send('password is wrong')
+    return
+    }
+  }
+  if(!emailExisted(email)){
+    res.status(403);
+    res.send('email is not existed')
+    return
+  }
+
+  res.cookie('user_id', userID);
+  res.redirect('/urls')
+
+  // res.cookie('user_id', userID);
+  // res.cookie('user_email', req.body.email);
+  // res.cookie('user_password', req.body.password);
+  // res.redirect("/urls");
 });
+
 
 app.post("/logout", (req, res) => {
   res.clearCookie('user_id');
