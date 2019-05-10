@@ -181,18 +181,21 @@ app.get("/urls/:shortURL", (req, res) => {
     user_id: req.cookies["user_id"],
     email: req.cookies.user_email
   };
-  console.log(urlDatabase[req.params.shortURL])
   res.render("urls_show", templateVars);
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL]
+  const longURL = urlDatabase[req.params.shortURL].longURL
   res.redirect(longURL);
 });
 
 app.post('/urls/:shortURL/delete', (req, res) => {
   const shortURL = req.params.shortURL
-  delete urlDatabase[shortURL]
+  for(var key in urlDatabase){
+    if(urlDatabase[key].userID === req.cookies.user_id){
+       delete urlDatabase[shortURL]
+    }
+  }
   res.redirect('/urls')
 })
 
