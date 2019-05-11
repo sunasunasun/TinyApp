@@ -10,7 +10,6 @@
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
     <% include ./partials/_header %>
-    <a href='#'>Create New TinyURL</a>
     <form method="POST" action="/urls/<%= shortURL %>">
     <p><%= shortURL %> - <%= urls[shortURL].longURL %></p>
     <p><input type="text" name="longURL" value = "<%= longURL.longURL %>"></p>

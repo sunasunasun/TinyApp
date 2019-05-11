@@ -15,16 +15,12 @@
     <form method="POST" action="/urls/<%= shortURL %>/delete">
       <ul>
         <li><%= shortURL %> - <%= urls[shortURL].longURL %>
-          <button type="submit" class="btn btn-primary">Delete</button>
-        </li>
-      </ul>
-    </form>
-    <form method="GET" action="/urls/<%= shortURL %>">
-      <ul>
-          <button type="submit" class="btn btn-primary">Edit</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+           <a class="btn btn-primary" href="/urls/<%= shortURL %>">Edit</a>
         </li>
       </ul>
     </form>
   <% } %>
 </body>
 </html>
+
