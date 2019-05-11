@@ -1,8 +1,10 @@
 <h2>TinyApp</h2>
-<a href='/register'>Register</a> | <a href='/login'>Login</a>
   <%if(email){%>
+  <a href='/urls'>URLs</a> | <a href='/urls/new'>Create New TinyURL</a>
     <p>Logged In As: <%= email %></p>
     <form method="POST" action="/logout">
           <button type="submit" class="btn btn-primary">Logout</button>
     </form>
+  <% }else{ %>
+    <a href='/register'>Register</a> | <a href='/login'>Login</a>
   <% } %>
