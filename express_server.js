@@ -1,6 +1,7 @@
 var express = require("express");
 var cookieParser = require('cookie-parser')
 var app = express();
+const bcrypt = require('bcrypt');
 app.use(cookieParser())
 var PORT = 8080;
 
@@ -17,14 +18,15 @@ const users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: bcrypt.hashSync("1", 10)
   },
  "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    password: bcrypt.hashSync("dishwasher-funk", 10)
+  },
   }
-}
+
 
 app.get("/urls", (req, res) => {
   if(req.cookies.user_id === undefined){
@@ -79,10 +81,10 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  //console.log(req.body.email)
   var userID = generateRandomString(6)
   const email = req.body.email
   const password = req.body.password
+  const hashedPassword = bcrypt.hashSync(req.body.password, 10);
   if(email === "" || password === ""){
     res.status(400);
     res.send('fields not there');
@@ -95,7 +97,7 @@ app.post("/register", (req, res) => {
     return
   }
 
-  addUser(userID, email, password)
+  addUser(userID, email, hashedPassword)
 
   res.cookie('user_id', userID);
   res.redirect('/urls')
@@ -109,11 +111,11 @@ function emailExisted(email){
   }
 }
 
-function addUser(userID, email, password) {
+function addUser(userID, email, hashedPassword) {
 users[userID] = {
     id: userID,
     email: email,
-    password: password
+    password: hashedPassword
   }
 }
 
@@ -140,12 +142,12 @@ app.post("/login", (req, res) => {
     return
   }
   for(var key in users){
-    if(users[key].email === email && users[key].password != password){
+    if(users[key].email === email && !bcrypt.compareSync(req.body.password, users[key].password)){
       res.status(403);
       res.send('password is wrong')
       return
     }
-    else if (users[key].email === email && users[key].password === password){
+    else if (users[key].email === email && bcrypt.compareSync(req.body.password, users[key].password)){
       res.cookie('user_id', key);
       res.redirect('/urls')
       return
